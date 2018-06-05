@@ -115,7 +115,7 @@ class PaperSheet extends Component {
                     {this.state.item["publisher"]}
                 </Typography>
                 <Typography variant="headline" component="h2">
-                    {"$ "}{this.state.item["price"]}
+                    {"$ "}{discardFloatOf(1*this.state.item["price"],2)}
                 </Typography>
                 <Typography variant="headline" component="h2">
                     {"Rating: "}{this.state.item["averageRating"]}
@@ -182,6 +182,10 @@ class PaperSheet extends Component {
     }
 }
 
+//remain up to Nth float
+function discardFloatOf(num,n){
+    return Math.floor( num * Math.pow( 10, n ) ) / Math.pow( 10, n ) ;
+}
 
 PaperSheet.propTypes = {
     classes: PropTypes.object.isRequired,

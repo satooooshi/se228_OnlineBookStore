@@ -161,8 +161,8 @@ ReactDOM.render(
             <Route path="/aaa" component={GuttersGrid} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={SignUpForm} />
-            <Route path="/cart" component={CustomizedList} />
-            <Route path="/profile" component={InputAdornments} />
+            <PrivateRoute path="/cart" component={CustomizedList} />
+            <PrivateRoute path="/profile" component={InputAdornments} />
             <PrivateRoute exact path='/' component={App} />
             <Route path="/detail/:id" render={(props) => <PaperSheet {...props}/>}/>
             <PrivateRoute path='/create' component={Create} />

@@ -73,10 +73,9 @@ public class OrderItemRestController {
     }
 
 
-    //curl http://localhost:8080/api/cart/ofId/6 -i -XPUT -H "Content-Type: application/json" -d "{\"id\":\"6\",\"userId\":\"2\",\"bookId\":\"6\",\"count\":\"1000\"}"
-    @PutMapping(path = "/ofId/{orderId}")
-    public OrderItem putCartItem(@PathVariable Long orderId, @RequestBody OrderItem item) {
-        item.setId(orderId);
+    //curl http://localhost:8080/api/cart/putCount -i -XPUT -H "Content-Type: application/json" -d "{\"id\":\"1\",\"userId\":\"1\",\"bookId\":\"63\",\"count\":\"100\"}"
+    @PutMapping(path = "/putCount")
+    public OrderItem putCartItem(@RequestBody OrderItem item) {
         return orderItemService.update(item);
     }
 

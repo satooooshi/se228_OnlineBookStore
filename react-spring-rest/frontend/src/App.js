@@ -209,12 +209,7 @@ class App extends Component {
         return (
           <div>
 
-            <SimpleMediaCard/>
-
               <br/>
-
-              <GuttersGrid/>
-
 
               <MenuAppBar user={this.state.user}/>
 

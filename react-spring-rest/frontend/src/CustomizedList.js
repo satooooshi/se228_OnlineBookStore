@@ -17,93 +17,6 @@ import Remove from '@material-ui/icons/Remove';
 import axios from 'axios';
 
 
-let volumeInfos=[
-    {
-        id:12345,
-        title:"Harry Potter",
-        publisher:"Packt",
-        publishedDate:"2012/4/23",
-        description:"the heartfull story just begun...",
-        averageRating:3.5,
-        imageLinks:"http://d1af37c1pl2nfl.cloudfront.net/images/books/kbs/front/harry-potter-and-the-cursed-child-parts-i-ii.jpg",
-        language:"english"
-    },
-    {
-        id:12346,
-        title:"Harry Potter",
-        publisher:"Packt",
-        publishedDate:"2012/4/23",
-        description:"the heartfull story just begun...",
-        averageRating:3.5,
-        imageLinks:"http://d1af37c1pl2nfl.cloudfront.net/images/books/kbs/front/harry-potter-and-the-cursed-child-parts-i-ii.jpg",
-        language:"english"
-    },
-    {
-        id:12347,
-        title:"Harry Potter",
-        publisher:"Packt",
-        publishedDate:"2012/4/23",
-        description:"the heartfull story just begun...",
-        averageRating:3.5,
-        imageLinks:"http://d1af37c1pl2nfl.cloudfront.net/images/books/kbs/front/harry-potter-and-the-cursed-child-parts-i-ii.jpg",
-        language:"english"
-    },
-    {
-        id:12348,
-        title:"Harry Potter",
-        publisher:"Packt",
-        publishedDate:"2012/4/23",
-        description:"the heartfull story just begun...",
-        averageRating:3.5,
-        imageLinks:"http://d1af37c1pl2nfl.cloudfront.net/images/books/kbs/front/harry-potter-and-the-cursed-child-parts-i-ii.jpg",
-        language:"english"
-    },{
-        id:12349,
-        title:"Harry Potter",
-        publisher:"Packt",
-        publishedDate:"2012/4/23",
-        description:"the heartfull story just begun...",
-        averageRating:3.5,
-        imageLinks:"http://d1af37c1pl2nfl.cloudfront.net/images/books/kbs/front/harry-potter-and-the-cursed-child-parts-i-ii.jpg",
-        language:"english"
-    }
-
-];
-
-let orderItems=[
-    {
-        id:1,
-        bookId:12345,
-        userId:1,
-        count:1,
-    },
-    {
-        id:2,
-        bookId:12346,
-        userId:1,
-        count:2,
-    },
-    {
-        id:3,
-        bookId:12347,
-        userId:1,
-        count:1,
-    },
-    {
-        id:4,
-        bookId:12348,
-        userId:1,
-        count:3,
-    },
-    {
-        id:5,
-        bookId:12349,
-        userId:1,
-        count:1,
-    },
-
-];
-
 
 const CustomTableCell = withStyles(theme => ({
     head: {
@@ -131,22 +44,10 @@ const styles = theme => ({
     },
 });
 
-let id = 0;
-function createData(name, calories, fat, carbs, protein) {
-    id += 1;
-    return { id, name, calories, fat, carbs, protein };
-}
-
-const data = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 
-async function getVolumeInfosOf(userId) {
+
+async function getCartItemsOf(userId) {
     try {
         const response = await axios.get('/api/cart/ofUserId/'+userId);
         console.log("getVolumeInfosOf");
@@ -173,8 +74,6 @@ class CustomizedList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            orderItems:[],
-            volumeInfos:[],
             orderItemsWithCount:[],
             selected:[],
             isLoading:false,
@@ -185,54 +84,32 @@ class CustomizedList extends Component {
         console.log("SHoppingCart fetching db of userId:"+(this.props.location.state && this.props.location.state.referrer));
 
         let userId=(this.props.location.state && this.props.location.state.referrer);
-        /*
-                fetch('/api/cart/ofUserId/' + (this.props.location.state && this.props.location.state.referrer))
-                    .then((response) => response.json())
-                    .then((responseJson) => {
-                        this.setState({
-                            orderItems: responseJson
-                        });
-                        console.log(responseJson);
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-
-
-
-                fetch('/api/cart/ofUserIdOfVolumeDetail/' + (this.props.location.state && this.props.location.state.referrer))
-                    .then((response) => response.json())
-                    .then((responseJson) => {
-                        this.setState({
-                            volumeInfos: responseJson
-                        });
-                        console.log(responseJson);
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-
-        */
 
 
 
                 let volInfos=[];
-                let orItems=[]
-                getVolumeInfosOf(userId)
+                let orItems=[];
+                getCartItemsOf(userId)
                 .then(responseData=>{
-                    volInfos=responseData;
+                    orItems=responseData;
                 });
                 getVolumeDetailOf(userId)
                 .then(responseData=>{
-                      orItems=responseData;
+                      volInfos=responseData;
                  })
                 .then(()=>{
                     let cartItem=[];
+                    console.log("volinfos");
+                    console.log(volInfos);
+                    console.log("orItems");
+                    console.log(orItems);
                                 volInfos.map((volume)=>{
-                                     let foundVolume=this.getVolumeWithIdAndCountFromArrayAndVolumeId(orderItems,volume.id);
-                                     console.log("count;;"+foundVolume.count+", bookId::"+volume.id);
-                                     volume["count"]=foundVolume.count;
-                                     volume["orderId"]=foundVolume.id;
+                                     let foundVolume=this.getVolumeWithIdAndCountFromArrayAndVolumeId(orItems,volume["id"]);
+                                     console.log("foundVolume");
+                                    console.log(foundVolume);
+
+                                     volume["count"]=foundVolume["count"];
+                                     volume["orderId"]=foundVolume["id"];
                                      cartItem=cartItem.concat(volume);
                                 });
 
@@ -241,23 +118,6 @@ class CustomizedList extends Component {
                 });
 
 
-        /*
-
-        let cartItem=[];
-        volumeInfos.map((volume)=>{
-            let foundVolume=this.getVolumeWithIdAndCountFromArrayAndVolumeId(orderItems,volume.id);
-            console.log("count;;"+foundVolume.count+", bookId::"+volume.id);
-            volume["count"]=foundVolume.count;
-            volume["orderId"]=foundVolume.id;
-            cartItem=cartItem.concat(volume);
-        });
-
-        console.log("cartItem");
-        console.log(cartItem);
-
-
-        this.setState({orderItemsWithCount:cartItem});
-        */
     }
 
 
@@ -266,6 +126,7 @@ class CustomizedList extends Component {
         let foundItem=array.find(item=>{
             console.log("getvolcont:"+item.count);
             if(item.bookId===volumeId) {
+                console.log("foundbookId::"+volumeId);
                 return item;
             }
         });
@@ -284,7 +145,9 @@ class CustomizedList extends Component {
             }
         });
 
-        this.setState({volumeInfos:nextVolumeInfos});
+        this.setState({
+            orderItemsWithCount:nextVolumeInfos,
+        });
 
     };
 
@@ -301,7 +164,9 @@ class CustomizedList extends Component {
             }
         });
 
-        this.setState({volumeInfos:nextVolumeInfos});
+        this.setState({
+            orderItemsWithCount:nextVolumeInfos,
+        });
 
     };
 
@@ -320,16 +185,15 @@ class CustomizedList extends Component {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         };
-        fetch("/api/cart/"+(this.props.location.state && this.props.location.state.referrer), {method, headers, body}).then((res)=> res.json()).then(console.log).catch(console.error);
+        fetch("/api/cart/putCount", {method, headers, body}).then((res)=> res.json()).then(console.log).catch(console.error);
     };
 
     handleRemoveClick=(volumeId)=>{
 
-        console.log(this.state.selected);
         console.log("remove items from order db.");
 
 
-        /*
+
                 fetch("/api/cart/removeItemsOfUserId/"+(this.props.location.state && this.props.location.state.referrer), {
                     method: 'POST',
                     headers: {
@@ -341,66 +205,19 @@ class CustomizedList extends Component {
                     console.log(response);
 
                 });
-        */
-        this.setState({orderItems:this.state.orderItems.filter(item => item.bookId !== volumeId),
-            volumeInfos:this.state.volumeInfos.filter(item => item.id !== volumeId),
-            isLoading:false,
+
+                console.log("delete succeed??");
+        let nextItems=this.state.orderItemsWithCount.filter(item =>item.id !== volumeId);
+        console.log(nextItems);
+
+        this.setState({
+            orderItemsWithCount:nextItems,
         });
 
 
-        /*
-        //
-                                    //after remove, fetch again to remove removed item
-                                    //
-                                    this.setState({orderItems:[],isLoading:true});
-                                    fetch('/api/cart/ofUserId/' + (this.props.location.state && this.props.location.state.referrer))
-                                        .then((response) => response.json())
-                                        .then((responseJson) => {
-                                            this.setState({
-                                                orderItems: responseJson,
-                                                isLoading:false
 
-                                            });
-                                            console.log(responseJson);
-                                        })
-                                        .catch((error) => {
-                                            console.error(error);
-                                        });
-
-
-                                    //this.setState({volumeInfos:[],isLoading:true});
-                                    fetch('/api/cart/ofUserIdOfVolumeDetail/' + (this.props.location.state && this.props.location.state.referrer))
-                                        .then((response) => response.json())
-                                        .then((responseJson) => {
-                                            this.setState({
-                                                volumesInfos: responseJson,
-                                                isLoading:false
-
-                                            });
-                                            console.log(responseJson);
-                                        })
-                                        .catch((error) => {
-                                            console.error(error);
-                                        });
-
-                                    //
-                                    //
-                                    //
-
-        */
     };
 
-    /*
-        getVolumeCount(volumeId){
-            let foundItem=this.state.orderItems.find(item=>{
-
-                if(item.bookId===volumeId) {
-                    return item;
-                }
-            });
-            return foundItem.count;
-        };
-    */
 
 
     render() {
